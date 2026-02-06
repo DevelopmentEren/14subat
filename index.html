@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Eren ❤️ Kadriye</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background: black;
+}
+
+/* SECTIONS */
+.section {
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.section.active {
+    display: flex;
+}
+
+/* OVERLAY */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+/* CONTENT */
+.content {
+    position: relative;
+    z-index: 5;
+    max-width: 700px;
+    padding: 20px;
+}
+
+/* BUTTONS */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    background: rgba(255,255,255,0.25);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    z-index: 10;
+    border-radius: 50%;
+}
+.prev { left: 20px; }
+.next { right: 20px; }
+
+/* HEARTS */
+.heart {
+    position: fixed;
+    color: red;
+    opacity: 0.85;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* HEART POP */
+.pop {
+    animation: pop 0.35s ease forwards;
+}
+
+@keyframes pop {
+    to { transform: scale(2); opacity: 0; }
+}
+
+/* BLUR TRANSITION */
+.blur-out {
+    animation: blurOut 0.5s ease forwards;
+}
+.blur-in {
+    animation: blurIn 0.6s ease forwards;
+}
+
+@keyframes blurOut {
+    from { opacity: 1; filter: blur(0); }
+    to   { opacity: 0; filter: blur(6px); }
+}
+
+@keyframes blurIn {
+    from { opacity: 0; filter: blur(6px); }
+    to   { opacity: 1; filter: blur(0); }
+}
+</style>
+</head>
+
+<body>
+
+<audio autoplay loop>
+    <source src="hersseysensin.mp3" type="audio/mpeg">
+</audio>
+<audio id="popSound" src="pop.mp3" preload="auto"></audio>
+
+<!-- SECTIONS -->
+<div class="section active" style="background-image:url('img/pic1.jpeg');">
+    <div class="overlay"></div>
+    <div class="content">
+        <h1>Kadriye ❤️</h1>
+        <p class="fs-4">Çok heyecanlıyımmm.. <br>Herşey senin için hayatım içimden geçenleri satırlara döktüm lütfenn kaydırr.</p>
+    </div>
+</div>
+
+<div class="section" style="background-image:url('img/pic4.jpg');">
+    <div class="overlay"></div>
+    <div class="content">
+        <h2>İlk tanışma...</h2>
+        <p class="fs-4">Tamı tamına 28 gün oldu..<br>İlk telefonla konuştuğumuzdan beri her aramada aynı heyecan her gelen bildirimde senden geldiğini düşünüp hemen telefona sarılıyorum.<br>Belki mesafemiz uzak ama kalplerimiz, ruhlarımız çok yakın...</p>
+    </div>
+</div>
+
+<div class="section" style="background-image:url('https://images.unsplash.com/photo-1495567720989-cebdbdd97913');">
+    <div class="overlay"></div>
+    <div class="content">
+        <h2>Hayallerimiz...</h2>
+        <p class="fs-4">Hani o izleyeceğimiz filmler, mutfakta yapacağımız o tatlı kavgalar, maç günü yapacağımız yalancı atışmalar...<br>Gün geçtikçe yaklaşıyor sanki, geçen hergün bir önceki günden daha derin oluyor hissettiklerim, eminim sende öyle hissediyorsundur...<br>Hani sanki 28 gün önce değilde çookk daha önce tanışmışız gibi hani sen hep ordaymışsında ben görememişim gibi...</p>
+    </div>
+</div>
+
+<div class="section" style="background-image:url('img/pic2.jpg');">
+    <div class="overlay"></div>
+    <div class="content">
+        <h2>Bizim Günümüz</h2>
+        <p class="fs-4">Sana karşı hislerimi anlatarak roman bile yazabilirim...<br>Ama sen zaten biliyorsun hissediyorsun, yazdıklarımı okuyunca nasıl sevineceğini biliyorum ve bunu hissetmek beni de çok sevindiriyor...<br>İyi ki hayatıma girmişsin..<br>İyi ki varsın..<br>Seni çookk seviyorumm...<br>Sevgililer günümüz kutlu olsun SEVGİLİM ♥</p>
+        <p class="mt-4">— EREN'DEN KADRİYE'YE 💙</p>
+    </div>
+</div>
+
+<!-- BUTTONS -->
+<button class="nav-btn prev" onclick="changeSlide(-1)">‹</button>
+<button class="nav-btn next" onclick="changeSlide(1)">›</button>
+
+<script>
+let index = 0;
+const sections = document.querySelectorAll(".section");
+const popSound = document.getElementById("popSound");
+let animating = false;
+
+function changeSlide(step) {
+    if (animating || index === sections.length - 1) return;
+    animating = true;
+
+    const current = sections[index];
+    current.classList.add("blur-out");
+
+    setTimeout(() => {
+        current.classList.remove("active", "blur-out");
+
+        index += step;
+        if (index >= sections.length - 1) {
+            index = sections.length - 1;
+            document.querySelectorAll(".nav-btn").forEach(b => b.style.display = "none");
+        }
+
+        const next = sections[index];
+        next.classList.add("active", "blur-in");
+
+        setTimeout(() => {
+            next.classList.remove("blur-in");
+            animating = false;
+        }, 600);
+    }, 500);
+}
+
+/* HEARTS */
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (16 + Math.random() * 20) + "px";
+
+    let y = window.innerHeight + 30;
+    heart.style.top = y + "px";
+    document.body.appendChild(heart);
+
+    const speed = 1.2 + Math.random();
+    const content = document.querySelector(".section.active .content");
+
+    const interval = setInterval(() => {
+        y -= speed;
+        heart.style.top = y + "px";
+
+        if (!content) return;
+
+        const h = heart.getBoundingClientRect();
+        const t = content.getBoundingClientRect();
+
+        if (
+            h.bottom >= t.top &&
+            h.top <= t.bottom &&
+            h.right >= t.left &&
+            h.left <= t.right
+        ) {
+            popSound.currentTime = 0;
+            popSound.play();
+            heart.classList.add("pop");
+            setTimeout(() => heart.remove(), 300);
+            clearInterval(interval);
+        }
+
+        if (y < -40) {
+            heart.remove();
+            clearInterval(interval);
+        }
+    }, 16);
+}
+
+setInterval(createHeart, 450);
+</script>
+
+</body>
+</html>
