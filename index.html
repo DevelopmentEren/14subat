@@ -27,10 +27,7 @@ body {
     color: white;
     text-align: center;
 }
-
-.section.active {
-    display: flex;
-}
+.section.active { display: flex; }
 
 /* OVERLAY */
 .overlay {
@@ -43,11 +40,11 @@ body {
 .content {
     position: relative;
     z-index: 5;
-    max-width: 700px;
+    max-width: 720px;
     padding: 20px;
 }
 
-/* BUTTONS */
+/* BUTTONS (masaüstü) */
 .nav-btn {
     position: absolute;
     top: 50%;
@@ -63,6 +60,11 @@ body {
 .prev { left: 20px; }
 .next { right: 20px; }
 
+/* MOBİLDE BUTONLARI GİZLE */
+@media (max-width: 768px) {
+    .nav-btn { display: none !important; }
+}
+
 /* HEARTS */
 .heart {
     position: fixed;
@@ -76,24 +78,18 @@ body {
 .pop {
     animation: pop 0.35s ease forwards;
 }
-
 @keyframes pop {
     to { transform: scale(2); opacity: 0; }
 }
 
 /* BLUR TRANSITION */
-.blur-out {
-    animation: blurOut 0.5s ease forwards;
-}
-.blur-in {
-    animation: blurIn 0.6s ease forwards;
-}
+.blur-out { animation: blurOut 0.5s ease forwards; }
+.blur-in  { animation: blurIn 0.6s ease forwards; }
 
 @keyframes blurOut {
     from { opacity: 1; filter: blur(0); }
     to   { opacity: 0; filter: blur(6px); }
 }
-
 @keyframes blurIn {
     from { opacity: 0; filter: blur(6px); }
     to   { opacity: 1; filter: blur(0); }
@@ -109,7 +105,7 @@ body {
 <audio id="popSound" src="pop.mp3" preload="auto"></audio>
 
 <!-- SECTIONS -->
-<div class="section active" style="background-image:url('pic1.jpeg');">
+<div class="section active" style="background-image:url('img/pic1.jpeg');">
     <div class="overlay"></div>
     <div class="content">
         <h1>Kadriye ❤️</h1>
@@ -117,7 +113,7 @@ body {
     </div>
 </div>
 
-<div class="section" style="background-image:url('pic4.jpg');">
+<div class="section" style="background-image:url('img/pic4.jpg');">
     <div class="overlay"></div>
     <div class="content">
         <h2>İlk tanışma...</h2>
@@ -133,7 +129,7 @@ body {
     </div>
 </div>
 
-<div class="section" style="background-image:url('pic2.jpg');">
+<div class="section" style="background-image:url('img/pic2.jpg');">
     <div class="overlay"></div>
     <div class="content">
         <h2>Bizim Günümüz</h2>
@@ -142,7 +138,7 @@ body {
     </div>
 </div>
 
-<!-- BUTTONS -->
+<!-- BUTTONS (masaüstü) -->
 <button class="nav-btn prev" onclick="changeSlide(-1)">‹</button>
 <button class="nav-btn next" onclick="changeSlide(1)">›</button>
 
@@ -152,6 +148,7 @@ const sections = document.querySelectorAll(".section");
 const popSound = document.getElementById("popSound");
 let animating = false;
 
+/* SLIDE CHANGE */
 function changeSlide(step) {
     if (animating || index === sections.length - 1) return;
     animating = true;
@@ -161,8 +158,8 @@ function changeSlide(step) {
 
     setTimeout(() => {
         current.classList.remove("active", "blur-out");
-
         index += step;
+
         if (index >= sections.length - 1) {
             index = sections.length - 1;
             document.querySelectorAll(".nav-btn").forEach(b => b.style.display = "none");
@@ -177,6 +174,22 @@ function changeSlide(step) {
         }, 600);
     }, 500);
 }
+
+/* MOBILE SWIPE */
+let startX = 0;
+
+document.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > 60) {
+        if (diff > 0) changeSlide(1);
+    }
+});
 
 /* HEARTS */
 function createHeart() {
@@ -202,12 +215,7 @@ function createHeart() {
         const h = heart.getBoundingClientRect();
         const t = content.getBoundingClientRect();
 
-        if (
-            h.bottom >= t.top &&
-            h.top <= t.bottom &&
-            h.right >= t.left &&
-            h.left <= t.right
-        ) {
+        if (h.bottom >= t.top && h.top <= t.bottom && h.right >= t.left && h.left <= t.right) {
             popSound.currentTime = 0;
             popSound.play();
             heart.classList.add("pop");
@@ -221,10 +229,8 @@ function createHeart() {
         }
     }, 16);
 }
-
 setInterval(createHeart, 450);
 </script>
 
 </body>
-
 </html>
